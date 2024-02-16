@@ -278,6 +278,7 @@ function Base.pop!(q::Deque{T}) where T
     @assert rear.back >= rear.front
 
     @inbounds x = rear.data[rear.back]
+    Base._unsetindex!(rear.data, rear.back)
     rear.back -= 1
     if rear.back < rear.front
         if q.nblocks > 1
@@ -303,6 +304,7 @@ function Base.popfirst!(q::Deque{T}) where T
     @assert head.back >= head.front
 
     @inbounds x = head.data[head.front]
+    Base._unsetindex!(head.data, head.front)
     head.front += 1
     if head.back < head.front
         if q.nblocks > 1
