@@ -99,7 +99,7 @@ Verifies if deque `d` is empty.
 Base.isempty(d::Deque) = d.len == 0
 
 """
-    length(d::Deque) 
+    length(d::Deque)
 
 Returns the number of elements in deque `d`.
 """
@@ -297,7 +297,7 @@ function Base.pop!(d::Deque{T}) where T
     @assert rear.back >= rear.front
 
     @inbounds x = rear.data[rear.back]
-    Base._unsetindex!(rear.data, rear.back)
+    Base._unsetindex!(rear.data, rear.back) # see issue/884
     rear.back -= 1
     if rear.back < rear.front
         if d.nblocks > 1
@@ -323,7 +323,7 @@ function Base.popfirst!(d::Deque{T}) where T
     @assert head.back >= head.front
 
     @inbounds x = head.data[head.front]
-    Base._unsetindex!(head.data, head.front)
+    Base._unsetindex!(head.data, head.front) # see issue/884
     head.front += 1
     if head.back < head.front
         if d.nblocks > 1
