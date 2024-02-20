@@ -63,7 +63,7 @@ end
 
 @inline Base.@propagate_inbounds function Base.pop!(D::CircularDeque)
     v = last(D)
-    Base._unsetindex!(D, D.last)
+    Base._unsetindex!(D.buffer, D.last)
     D.n -= 1
     tmp = D.last - 1
     D.last = ifelse(tmp < 1, D.capacity, tmp)
@@ -91,7 +91,7 @@ Remove the element at the front.
 """
 @inline Base.@propagate_inbounds function Base.popfirst!(D::CircularDeque)
     v = first(D)
-    Base._unsetindex!(D, D.first)
+    Base._unsetindex!(D.buffer, D.first)
     D.n -= 1
     tmp = D.first + 1
     D.first = ifelse(tmp > D.capacity, 1, tmp)
