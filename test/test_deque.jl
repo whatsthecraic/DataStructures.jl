@@ -212,4 +212,27 @@
         @test last(q) == 3
         @test num_blocks(q) == 1
     end
+
+    @testset "pop! and popfirst! don't leak" begin
+        q = Deque{Int}(4)
+
+        @testset "pop! doesn't leak" begin
+            push!(q,2)
+            pushfirst!(q,1)
+            ss2 = Base.summarysize(q)
+            pop!(q)
+            GC.gc(true)
+            ss1 = Base.summarysize(q)
+            @test ss1 < ss2
+        end
+        @testset "popfirst! doesn't leak" begin
+            push!(q,2)
+            push!(q,3)
+            ss2 = Base.summarysize(q)
+            popfirst!(q)
+            GC.gc(true)
+            ss1 = Base.summarysize(q)
+            @test ss1 < ss2
+        end
+    end
 end # @testset Deque
